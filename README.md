@@ -1,0 +1,1 @@
+A simple diary written in C which will take user input and save it into a SQLite table.
