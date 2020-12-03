@@ -1,3 +1,4 @@
+#include "queries.h"
 // will have the following functions:
 // search_db(), which will take the date string and search the database for entries, will return a bool
 
