@@ -15,5 +15,6 @@ date.o: date.c date.h
 
 queries.o: queries.c queries.h
 	$(CC) $(CFLAGS) -c queries.c
+
 clean:
 	$(RM) diary

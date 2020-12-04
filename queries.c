@@ -1,4 +1,8 @@
 #include "queries.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 // will have the following functions:
 // search_db(), which will take the date string and search the database for entries, will return a bool
 

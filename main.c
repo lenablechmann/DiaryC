@@ -9,13 +9,24 @@
 
 int main(int argc, char *argv[])
 {
-    // User input needs to have 3 parts (program name, what do, and date).
+    // User input will have 3 argc: argv[1] is the command, argv[2] is the date string
     if (argc != 3)
     {
-        printf("Usage: ./diary command date.\nLike: ./diary write today \n");
+        printf("Usage: ./diary command date.\nFor example: ./diary write today \n");
         exit(EXIT_FAILURE);
     }
-    // Sends the date string to date.c, which decides if it's an alright date.
+
+    // Sends the date string to date.c, will return a null string if date is wrong.
+    char *user_date = 0;
+    user_date = parse_date_string(argv[2]);
+
+    if (user_date == NULL)
+    {
+        printf("Acceptable date input formats: today, yesterday or DD.MM.YYYY\n");
+        exit(EXIT_FAILURE);
+    }
+    printf("%s \n", user_date);
+
 
     // Checks general command input. make use of tolower(), also w, r, d, rm, and -r -w -d -rm are ok
 
@@ -31,6 +42,5 @@ int main(int argc, char *argv[])
     // if so, delete the entry
 
     // once finished and got "true" from the function it called, exit the program
-    printf("We did it.\n");
     return 0;
 }
