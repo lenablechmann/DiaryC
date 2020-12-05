@@ -5,7 +5,7 @@ CFLAGS = -g -Wall
 # all: dbtest.c
 	# $(CC) $(CFLAGS) -o dbtest dbtest.c -lsqlite3
 diary: main.o date.o queries.o
-	$(CC) $(CFLAGS) -o diary main.o date.o queries.o
+	$(CC) $(CFLAGS) -o diary main.o date.o queries.o -lsqlite3
 
 main.o: main.c queries.h date.h
 	$(CC) $(CFLAGS) -c main.c

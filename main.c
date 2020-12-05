@@ -17,15 +17,16 @@ int main(int argc, char *argv[])
     }
 
     // Sends the date string to date.c, will return a null string if date is wrong.
-    char *user_date = 0;
-    user_date = parse_date_string(argv[2]);
+    char user_date[DATE_LENGTH] = {0};
+    char *usr_date_string = user_date;
+    usr_date_string = parse_date_string(argv[2]);
 
-    if (user_date == NULL)
+    if (usr_date_string == NULL)
     {
         printf("Acceptable date input formats: today, yesterday or DD.MM.YYYY\n");
         exit(EXIT_FAILURE);
     }
-    printf("%s \n", user_date);
+    printf("Your date is %s\n", usr_date_string);
 
 
     // Checks general command input. make use of tolower(), also w, r, d, rm, and -r -w -d -rm are ok
