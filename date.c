@@ -7,6 +7,8 @@
 #include <string.h>
 #include <ctype.h>
 
+// todo add a function, that checks if date is plausible (leap year, months and days), returns 0 if nah, 1 if plausible
+
 char *parse_date_string(char *user_date)
 {
     // adding a final result date string
@@ -27,11 +29,11 @@ char *parse_date_string(char *user_date)
 
     else
     {
-        // Temporary date string for comparing words 
+        // Temporary date string for comparing words
         char date[DATE_LENGTH] = {0};
 
         // Checking if user input is "today" or "yesterday".
-        for(int i = 0; *input_string_ptr != '\0'; input_string_ptr++, i++)
+        for (int i = 0; *input_string_ptr != '\0'; input_string_ptr++, i++)
         {
             if (isalpha(*input_string_ptr))
             {
@@ -52,17 +54,35 @@ char *parse_date_string(char *user_date)
             return "yesterday";
         }
 
-        // user input is a numeric date then.        
+        // Assuming user input is a numeric date then. Parse it into ints.
         sscanf(user_date, " %d.%d.%d ", &day, &month, &year);
+    
+        int plausibility = date_plausibility(day, month, year);
 
-        if(day <= 0 || day > 31 || month <= 0 || month > 12 || year <= 0 || year > 9999)
+        if (plausibility == 1)
+        {
+            // Use sprintf concatenate ints into strings incl leading zeroes.
+            sprintf(date_final, "%04d-%02d-%02d", year, month, day);
+            return final_string;
+        }
+        else
         {
             return NULL;
         }
-        // Use sprintf concatenate ints into strings incl leading zeroes.
-        sprintf(date_final, "%04d-%02d-%02d", year, month, day);
-
     }
+}
 
-    return final_string;
+int date_plausibility(const int day, const int month, const int year)
+{
+    // checks date plausibility (days in a month, leap year), returns 0 if date unplausible. 1 if plausible.
+
+    if (day <= 0 || day > 31 || month <= 0 || month > 12 || year <= 0 || year > 9999)
+    {
+        return  0;
+    }
+    else
+    {
+        return 1;
+    }
+    
 }
