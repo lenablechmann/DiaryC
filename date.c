@@ -49,18 +49,18 @@ char *parse_date_string(char *user_date)
         }
 
         // Apparently user input is numeric date then.        
-        // Resetting pointer address to parse the user input:
-        pointer = user_date;
+        // Check if date is at least plausible, perhaps use atoi or maybe use calculators as reference
+        sscanf(user_date, "%2d.%2d.%4d", &day, &month, &year);
 
-        for(int i = 0; *pointer != '\0'; pointer++, i++)
+        if(day < 0 || day > 31 || month < 0 || month > 12 || year < 0 || year > 9999)
         {
-            // Check if input is a special char, if it aint ".", return NULL, cause it aint a format we like
-            // Can add USA MM/DD/YYYY format later at some point.
-            if (isalpha(*pointer) == 0 && *pointer == '.')
-            {
-                date[i] = '-';
-            }
+            return NULL;
         }
+        printf("Day is %d month is %d and year is %d \n", day, month, year);
+
+        // Use sprintf concatenate ints into strings
+        sprintf(pointer, "%d-%d-%d", year, month, day);
     }
-    return "all g";
+
+    return pointer;
 }
