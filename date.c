@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <time.h>
 
 // todo add a function, that checks if date is plausible (leap year, months and days), returns 0 if nah, 1 if plausible
 
@@ -46,13 +47,25 @@ char *parse_date_string(char *user_date)
 
         if (strcmp(input_string_ptr, "today") == 0)
         {
-            // TODO: get the real date via time library (also add the lib), save into a string and return it
-            return "today";
+            time_t now = time(NULL);
+            // localtime returns a pointer to a tm struct with ints day, month(0 to 11), year(since 1900) and time filled in
+            struct tm *lt = localtime(&now);
+            sprintf(date_final, "%04d-%02d-%02d", (lt->tm_year)+1900, (lt->tm_mon)+1, lt->tm_mday);
+
+            return final_string;
         }
+
         if (strcmp(input_string_ptr, "yesterday") == 0)
         {
-            // TODO: get the real date via time library (also add the lib), save into a string and return it
-            return "yesterday";
+            time_t now = time(NULL);
+            // localtime returns a pointer to a tm struct with ints day, month(0 to 11), year(since 1900) and time filled in
+            struct tm *lt = localtime(&now);
+            lt->tm_mday--; // getting the previous day
+            mktime(lt); // mktime normalizes the time, so that it doesn't show 0 on the 1st etc, says SO
+
+            sprintf(date_final, "%04d-%02d-%02d", (lt->tm_year)+1900, (lt->tm_mon)+1, lt->tm_mday);
+
+            return final_string;
         }
 
         // Assuming user input is a numeric date then. Parse it into ints.
@@ -82,12 +95,14 @@ int date_plausibility(const int day, const int month, const int year)
     {
         return 0;
     }
+
+    // Checking days per month depending on leap/common year
     else
     {
         // Arrays for days per month in leap years and non leap years, 0 indexed so January is 0, December is 11:
         int days_per_month_leap[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
         int days_per_month_non[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-        
+
         // check if year is a leap year
         if (year % 4 == 0 && year % 100 != 0)
         {
@@ -99,7 +114,7 @@ int date_plausibility(const int day, const int month, const int year)
             }
         }
 
-        else if(year % 4 == 0 && year % 100 == 0 && year % 400 == 0)
+        else if (year % 4 == 0 && year % 100 == 0 && year % 400 == 0)
         {
             // a leap year, checking if days are plausible via array. month - 1 cause arrays are 0 indexed
             if (day > days_per_month_leap[month - 1])
