@@ -2,13 +2,10 @@
 // dates are only acceptable if they have the form "today", "yesterday" or DD.MM.YYYY
 
 #include "date.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <ctype.h>
+#include <stdio.h>
+#include <string.h>
 #include <time.h>
-
-// todo add a function, that checks if date is plausible (leap year, months and days), returns 0 if nah, 1 if plausible
 
 char *parse_date_string(char *user_date)
 {
@@ -86,9 +83,9 @@ char *parse_date_string(char *user_date)
     }
 }
 
+// checks date plausibility (days in a month, leap year), returns 0 if date unplausible. 1 if plausible.
 int date_plausibility(const int day, const int month, const int year)
 {
-    // checks date plausibility (days in a month, leap year), returns 0 if date unplausible. 1 if plausible.
 
     // first preliminary check; covering generally impossible things like negative days
     if (day <= 0 || day > 31 || month <= 0 || month > 12 || year <= 0 || year > 9999)
@@ -96,7 +93,7 @@ int date_plausibility(const int day, const int month, const int year)
         return 0;
     }
 
-    // Checking days per month depending on leap/common year
+    // a thorough leap year check.
     else
     {
         // Arrays for days per month in leap years and non leap years, 0 indexed so January is 0, December is 11:
@@ -109,24 +106,24 @@ int date_plausibility(const int day, const int month, const int year)
             // definitely a leap year, checking if days are plausible via array. month - 1 cause arrays are 0 indexed
             if (day > days_per_month_leap[month - 1])
             {
-                printf("The date you've entered has too many days/month.\n");
+                printf("The date you've entered has too many days in a month.\n");
                 return 0;
             }
         }
 
         else if (year % 4 == 0 && year % 100 == 0 && year % 400 == 0)
         {
-            // a leap year, checking if days are plausible via array. month - 1 cause arrays are 0 indexed
+            // a leap year
             if (day > days_per_month_leap[month - 1])
             {
-                printf("The date you've entered has too many days/month.\n");
+                printf("The date you've entered has too many days in a month.\n");
                 return 0;
             }
         }
 
         else
         {
-            // not a leap year, checking if days are plausible via array. month -1 cause arrays are 0 indexed
+            // not a leap year
             if (day > days_per_month_non[month - 1])
             {
                 printf("The date you've entered has too many days/month for a common year.\n");
