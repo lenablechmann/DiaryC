@@ -85,8 +85,8 @@ int date_plausibility(const int day, const int month, const int year)
     else
     {
         // Arrays for days per month in leap years and non leap years, 0 indexed so January is 0, December is 11:
-        int days_per_month_non[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-        int days_per_month_leap[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+        int days_per_month_leap[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+        int days_per_month_non[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
         
         // check if year is a leap year
         if (year % 4 == 0 && year % 100 != 0)
