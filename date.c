@@ -2,10 +2,6 @@
 // dates are only acceptable if they have the form "today", "yesterday" or DD.MM.YYYY
 
 #include "date.h"
-#include <ctype.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
 
 char *parse_date_string(char *user_date)
 {

@@ -16,7 +16,9 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    // Sends the date string to date.c, will return a null string if date is wrong.
+    // Sends the argv (user date input) to date.c, will return a null string if date is wrong
+    // If the date is plausible, it will return the formatted date string YYYY-MM-DD
+
     char user_date[DATE_LENGTH] = {0};
     char *usr_date_string = user_date;
     usr_date_string = parse_date_string(argv[2]);
@@ -36,7 +38,7 @@ int main(int argc, char *argv[])
     // which will save the user input to the database (or cat it if the entry already exists)
     // until the user inputs the ending
 
-    // r, -r, read should call the read function from queries.c, which will print the required entry
+    // r, -r, read should call the display function from queries.c, which will print the required entry
     // if that entry exists (make a separate search db function in queries.c)
 
     // if user input is delete, check if there is an entry with the date,
