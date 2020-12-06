@@ -94,6 +94,7 @@ int date_plausibility(const int day, const int month, const int year)
             // definitely a leap year, checking if days are plausible via array. month - 1 cause arrays are 0 indexed
             if (day > days_per_month_leap[month - 1])
             {
+                printf("The date you've entered has too many days/month.\n");
                 return 0;
             }
         }
@@ -103,6 +104,7 @@ int date_plausibility(const int day, const int month, const int year)
             // a leap year, checking if days are plausible via array. month - 1 cause arrays are 0 indexed
             if (day > days_per_month_leap[month - 1])
             {
+                printf("The date you've entered has too many days/month.\n");
                 return 0;
             }
         }
@@ -112,6 +114,7 @@ int date_plausibility(const int day, const int month, const int year)
             // not a leap year, checking if days are plausible via array. month -1 cause arrays are 0 indexed
             if (day > days_per_month_non[month - 1])
             {
+                printf("The date you've entered has too many days/month for a common year.\n");
                 return 0;
             }
         }
