@@ -6,6 +6,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
+#define LENGTH 4000
+#define DATE 12
 
 bool search_db(char *date_string);
 bool write_entry(char *date_string);

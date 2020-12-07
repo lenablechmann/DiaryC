@@ -1,6 +1,6 @@
 #ifndef DATE_H 
 #define DATE_H 
-#define DATE_LENGTH 11
+#define DATE_LENGTH 12
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>

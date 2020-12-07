@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
     }
     printf("Your date is %s\n", usr_date_string);
 
+    write_entry(usr_date_string);
 
     // Checks general command input. make use of tolower(), also w, r, d, rm, and -r -w -d -rm are ok
 

@@ -70,6 +70,7 @@ char *parse_date_string(char *user_date)
         {
             // Use sprintf concatenate ints into strings incl leading zeroes.
             sprintf(date_final, "%04d-%02d-%02d", year, month, day);
+            
             return final_string;
         }
         else
@@ -88,7 +89,6 @@ int date_plausibility(const int day, const int month, const int year)
     {
         return 0;
     }
-
     // a thorough leap year check.
     else
     {
