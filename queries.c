@@ -12,26 +12,47 @@ bool search_db(char *date_string, size_t date_len)
 bool write_entry(char *date_string, size_t date_len)
 {
     printf("The size of this string is %ld and the string is %s\n", date_len, date_string);
-    // entry array shall be null to prepare it as a string
-    /*
-    char entry_array[LENGTH + 1] = {0};
-    char *entry_string = entry_array;
-    char user_char = 0;
-    int count;
-    */
-    /*user_char = getc(stdin);
-    for (count = 0; user_char != EOF && count <= LENGTH; count++)
+    //TODO remalloc date_string
+
+    // initializing a string for the user input
+    char *entry = (char*)(malloc((ENTRY_LEN + 1) * sizeof(char)));
+    if (entry == NULL)
     {
-        // Storing user input into the array one char at a time, until EOF (CTRL D)
-        entry_array[count] = user_char;
+        printf("Error allocating memory for the entry.\n");
+        return false;
     }
-    printf("your entry for the day %s: \n", date_string);
-    puts(entry_string);
-    */
+    printf("The date is %s\n", date_string);
+
+    // Initializing the string to NUL
+    for (int i = 0; i < ENTRY_LEN + 1; i++)
+    {
+        entry[i] ='\0';
+    }
+
+    printf("Your entry:\n");
+    char input_tmp = 0;
+    int count = 0;
+
+    for (; count <= ENTRY_LEN; count++)
+    {
+        input_tmp = getc(stdin);
+        if (input_tmp == EOF)
+        {
+            break;
+        }
+        entry[count] = input_tmp;
+    }
+    printf("\nYour entry for the day %s is:\n", date_string);
+    
+    for (char *trace = entry; *trace != '\0'; trace++)
+    {
+        printf("%c", *trace);
+    }
 
     // prints: how was the day? and accepts user input 
     // which will take the date string, use search_db, then if entry exists cat onto the existing
     // if entry doesn't exist, make a new entry for the date, returns bool for success
+    free(entry);
     return true;
 }
 

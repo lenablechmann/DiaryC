@@ -5,6 +5,7 @@
 #include <sqlite3.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #define ENTRY_LEN 4000
 

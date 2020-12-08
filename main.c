@@ -18,33 +18,31 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    // Sends the argv (user date input) to date.c, will return a null string if date is wrong
-    // If the date is plausible, it will return the formatted date string YYYY-MM-DD
-
-    char *final_string = (char*)(malloc((LENGTH + 1) * sizeof(char)));
-    if (final_string == NULL)
+    // Preparing a string where the date in ISO format will be stored (for future SQL queries)
+    char *date_string = (char*)(malloc((LENGTH + 1) * sizeof(char)));
+    if (date_string == NULL)
     {
         printf("Error allocating memory for the date string.\n");
         exit(EXIT_FAILURE);
     }
 
+    // Initializing the string to NUL
     for (int i = 0; i < LENGTH + 1; i++)
     {
-        final_string[i] = '\0';
+        date_string[i] = '\0';
     }
 
-    final_string = parse_date_string(argv[2]);
-
-    if (!final_string)
+    // Sends the argv (user date input) to date.c, will return a null string if user input seems off
+    // If the date is plausible, the function will return the formatted date string YYYY-MM-DD
+    date_string = parse_date_string(argv[2]);
+    if (!date_string)
     {
         printf("Acceptable date input formats: today, yesterday or DD.MM.YYYY\n");
         exit(EXIT_FAILURE);
     }
-    size_t string_len = strlen(final_string);
-
-    printf("Your date is %s, and string length is %d\n", final_string, LENGTH);
-
-    write_entry(final_string, string_len);
+    // printf("Your date is %s, and string length is %d\n", date_string, LENGTH);
+    // invoking write for testing
+    write_entry(date_string, LENGTH);
 
     // Checks general command input. make use of tolower(), also w, r, d, rm, and -r -w -d -rm are ok
 
