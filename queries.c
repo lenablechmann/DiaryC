@@ -15,7 +15,7 @@ bool write_entry(char *date_string, size_t date_len)
 
     //TODO realloc date_string if not enough has been allocated
     // initializing a string for the user input
-    char *entry = (char*)(malloc((ENTRY_LEN + 1) * sizeof(char)));
+    char *entry = (char *)(malloc((ENTRY_LEN + 1) * sizeof(char)));
     if (entry == NULL)
     {
         printf("Error allocating memory for the entry.\n");
@@ -25,12 +25,12 @@ bool write_entry(char *date_string, size_t date_len)
     // Initializing the string to NUL
     for (int i = 0; i < ENTRY_LEN + 1; i++)
     {
-        entry[i] ='\0';
+        entry[i] = '\0';
     }
 
     printf("Write away (CTRL + D to save the entry and exit):\n");
 
-    // getc needs to be stored in an int, cause EOF is a negative int 
+    // getc needs to be stored in an int, cause EOF is a negative int
     int input_tmp = 0;
     int count = 0;
 
@@ -74,15 +74,15 @@ bool write_entry(char *date_string, size_t date_len)
     sqlite3_stmt *stmt;
     int err = sqlite3_prepare_v2(db, "INSERT INTO diary(date, entry) VALUES(?, ?)", -1, &stmt, NULL);
     if (err != SQLITE_OK)
-        {
-            printf("Sql statement failed. %s \n", sqlite3_errmsg(db));
-            sqlite3_finalize(stmt);
-            sqlite3_close(db);
-            return 0;
-        }
+    {
+        printf("Sql statement failed. %s \n", sqlite3_errmsg(db));
+        sqlite3_finalize(stmt);
+        sqlite3_close(db);
+        return 0;
+    }
     // binding values (date and entry):
-    sqlite3_bind_text(stmt, 1, "2023-12-12", -1, NULL);
-    sqlite3_bind_text(stmt, 2, "just testing away.", -1, NULL);
+    sqlite3_bind_text(stmt, 1, date_string, -1, NULL);
+    sqlite3_bind_text(stmt, 2, entry, -1, NULL);
 
     // Inserts values into table via step
     sqlite3_step(stmt);
