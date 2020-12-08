@@ -7,6 +7,8 @@
 #include "queries.h"
 #include "date.h"
 
+#define LENGTH 10
+
 int main(int argc, char *argv[])
 {
     // User input will have 3 argc: argv[1] is the command, argv[2] is the date string
@@ -19,18 +21,30 @@ int main(int argc, char *argv[])
     // Sends the argv (user date input) to date.c, will return a null string if date is wrong
     // If the date is plausible, it will return the formatted date string YYYY-MM-DD
 
-    char user_date[DATE_LENGTH] = {0};
-    char *usr_date_string = user_date;
-    usr_date_string = parse_date_string(argv[2]);
+    char *final_string = (char*)(malloc((LENGTH + 1) * sizeof(char)));
+    if (final_string == NULL)
+    {
+        printf("Error allocating memory for the date string.\n");
+        exit(EXIT_FAILURE);
+    }
 
-    if (usr_date_string == NULL)
+    for (int i = 0; i < LENGTH + 1; i++)
+    {
+        final_string[i] = '\0';
+    }
+
+    final_string = parse_date_string(argv[2]);
+
+    if (!final_string)
     {
         printf("Acceptable date input formats: today, yesterday or DD.MM.YYYY\n");
         exit(EXIT_FAILURE);
     }
-    printf("Your date is %s\n", usr_date_string);
+    size_t string_len = strlen(final_string);
 
-    write_entry(usr_date_string);
+    printf("Your date is %s, and string length is %d\n", final_string, LENGTH);
+
+    write_entry(final_string, string_len);
 
     // Checks general command input. make use of tolower(), also w, r, d, rm, and -r -w -d -rm are ok
 

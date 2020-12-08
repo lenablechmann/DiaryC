@@ -3,15 +3,15 @@
 
 #include "queries.h"
 
-bool search_db(char *date_string)
+bool search_db(char *date_string, size_t date_len)
 {
     // will take the date string and search the database for entries, just to see if entry exists.
     return true;
 }
 
-bool write_entry(char *date_string)
+bool write_entry(char *date_string, size_t date_len)
 {
-    char date_array[DATE] = {0};
+    printf("The size of this string is %ld and the string is %s\n", date_len, date_string);
     // entry array shall be null to prepare it as a string
     /*
     char entry_array[LENGTH + 1] = {0};
@@ -19,15 +19,6 @@ bool write_entry(char *date_string)
     char user_char = 0;
     int count;
     */
-   char *ptr = date_string;
-   for (int i = 0; *ptr != '\0' && i < DATE; ptr++, i++)
-   {
-       date_array[i] = *ptr;
-   }
-
-    printf("Possibly your date: ");
-    puts(date_array);
-
     /*user_char = getc(stdin);
     for (count = 0; user_char != EOF && count <= LENGTH; count++)
     {
@@ -44,7 +35,7 @@ bool write_entry(char *date_string)
     return true;
 }
 
-bool display_entry(char *date_string)
+bool display_entry(char *date_string, size_t date_len)
 {
     // prints here is your entry from date: and then the entry itself
     // which will take the date string, use search_db, and either print out entry to screen, or return error to main
@@ -52,7 +43,7 @@ bool display_entry(char *date_string)
     return true;
 }
 
-bool delete_entry(char *date_string)
+bool delete_entry(char *date_string, size_t date_len)
 {
     // delete(), which will take the date string, use search_db, and delete entry if finds it.
     // returns false if nothing can be found

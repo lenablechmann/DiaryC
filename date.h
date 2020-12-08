@@ -1,8 +1,9 @@
 #ifndef DATE_H 
 #define DATE_H 
-#define DATE_LENGTH 12
+#define DATE_LENGTH 11
 #include <ctype.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <time.h>
 

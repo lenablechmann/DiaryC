@@ -1,13 +1,22 @@
 // gets a date string from argv and returns it as YYYY-MM-DD string
 // dates are only acceptable if they have the form "today", "yesterday" or DD.MM.YYYY
-
+// TODO allocate string dynamically and pass it like a normal thing or return a struct ffs
 #include "date.h"
 
 char *parse_date_string(char *user_date)
 {
     // the final result will be stored in this string
-    char date_final[DATE_LENGTH] = {0};
-    char *final_string = date_final;
+    char *str_date = (char*)(malloc((DATE_LENGTH + 1) * sizeof(char)));
+    if (str_date == NULL)
+    {
+        printf("Error allocating memory for the date string.\n");
+        return NULL;
+    }
+
+    for (int i = 0; i < DATE_LENGTH + 1; i++)
+    {
+        str_date[i] = '\0';
+    }
 
     // ints for error checking user input dates
     int day = 0, month = 0, year = 0;
@@ -43,9 +52,9 @@ char *parse_date_string(char *user_date)
             time_t now = time(NULL);
             // localtime returns a pointer to a tm struct with ints day, month(0 to 11), year(since 1900) and time filled in
             struct tm *lt = localtime(&now);
-            sprintf(date_final, "%04d-%02d-%02d", (lt->tm_year)+1900, (lt->tm_mon)+1, lt->tm_mday);
+            sprintf(str_date, "%04d-%02d-%02d", (lt->tm_year)+1900, (lt->tm_mon)+1, lt->tm_mday);
 
-            return final_string;
+            return str_date;
         }
 
         if (strcmp(input_string_ptr, "yesterday") == 0)
@@ -56,9 +65,9 @@ char *parse_date_string(char *user_date)
             lt->tm_mday--; // getting the previous day
             mktime(lt); // mktime normalizes the time, so that it doesn't show 0 on the 1st etc, says SO
 
-            sprintf(date_final, "%04d-%02d-%02d", (lt->tm_year)+1900, (lt->tm_mon)+1, lt->tm_mday);
+            sprintf(str_date, "%04d-%02d-%02d", (lt->tm_year)+1900, (lt->tm_mon)+1, lt->tm_mday);
 
-            return final_string;
+            return str_date;
         }
 
         // Assuming user input is a numeric date then. Parse it into ints.
@@ -69,15 +78,16 @@ char *parse_date_string(char *user_date)
         if (plausibility == 1)
         {
             // Use sprintf concatenate ints into strings incl leading zeroes.
-            sprintf(date_final, "%04d-%02d-%02d", year, month, day);
+            sprintf(str_date, "%04d-%02d-%02d", year, month, day);
             
-            return final_string;
+            return str_date;
         }
         else
         {
             return NULL;
         }
     }
+    free(str_date);
 }
 
 // checks date plausibility (days in a month, leap year), returns 0 if date unplausible. 1 if plausible.
