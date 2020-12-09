@@ -42,6 +42,11 @@ bool search_db(char *date_string, size_t date_len)
     if (sqlite3_step(stmt) != SQLITE_DONE) {
         printf("your entry is:\n%s \n", sqlite3_column_text(stmt, 0));
     }
+    else
+    {
+        printf("No such entry exists.\n");
+    }
+    
 
     // clearing memory alloced for the stmt
     sqlite3_finalize(stmt);
