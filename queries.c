@@ -6,6 +6,47 @@
 bool search_db(char *date_string, size_t date_len)
 {
     // will take the date string and search the database for entries, just to see if entry exists.
+    // accessing the db (creating one if doesn't exist)
+    sqlite3 *db;
+    int result = sqlite3_open("diary.db", &db);
+
+    // Checking db opened successfully (is not 0)
+    if (result)
+    {
+        printf("Can't open database.\n");
+        sqlite3_close(db);
+        return 0;
+    }
+
+    // making sure the table either exists or is created here.
+    if (sqlite3_exec(db, "CREATE TABLE IF NOT EXISTS diary (id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 0, date INTEGER NOT NULL,entry TEXT NOT NULL);", NULL, NULL, NULL))
+    {
+        printf("Error opening the sqlite table.\n");
+    }
+
+    // using prepared statements v2 (v3 is for special occasions according to doco)
+    sqlite3_stmt *stmt;
+
+    int err = sqlite3_prepare_v2(db, "SELECT entry FROM diary WHERE date = ?", -1, &stmt, NULL);
+    if (err != SQLITE_OK)
+    {
+        printf("Sql failed to run the select statement. %s \n", sqlite3_errmsg(db));
+        sqlite3_finalize(stmt);
+        sqlite3_close(db);
+        return 0;
+    }
+
+    // binding values (date and entry):
+    sqlite3_bind_text(stmt, 1, date_string, -1, NULL);
+
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        printf("your entry is:\n%s \n", sqlite3_column_text(stmt, 0));
+    }
+
+    // clearing memory alloced for the stmt
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+
     return true;
 }
 
@@ -44,23 +85,14 @@ bool write_entry(char *date_string, size_t date_len)
         entry[count] = input_tmp;
     }
 
-    /* printf("\nYour entry for the day %s is:\n", date_string);
-    
-    for (char *trace = entry; *trace != '\0'; trace++)
-    {
-        printf("%c", *trace);
-    }
-    */
-
     // which will take the date string, use search_db, then if entry exists cat onto the existing
     // if entry doesn't exist, make a new entry for the date, returns bool for success
 
-    // accessing the db testing
-    // SCHEMA: CREATE TABLE diary (id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 0, date INTEGER NOT NULL,entry TEXT NOT NULL);
+    // accessing the db (creating one if doesn't exist)
     sqlite3 *db;
     int result = sqlite3_open("diary.db", &db);
 
-    // Checking it opened successfully (is not 0)
+    // Checking db opened successfully (is not 0)
     if (result)
     {
         printf("Can't open database.\n");
@@ -68,9 +100,13 @@ bool write_entry(char *date_string, size_t date_len)
         return 0;
     }
 
-    // using prepared statements v2 (v3 is for special occasions according to doco)
-    // prepare_v2 helps you avoid sql injections https://www.sqlite.org/c3ref/prepare.html
+    // making sure the table either exists or is created here.
+    if (sqlite3_exec(db, "CREATE TABLE IF NOT EXISTS diary (id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 0, date INTEGER NOT NULL,entry TEXT NOT NULL);", NULL, NULL, NULL))
+    {
+        printf("Error executing sql statement\n");
+    }
 
+    // using prepared statements v2 (v3 is for special occasions according to doco)
     sqlite3_stmt *stmt;
     int err = sqlite3_prepare_v2(db, "INSERT INTO diary(date, entry) VALUES(?, ?)", -1, &stmt, NULL);
     if (err != SQLITE_OK)
@@ -80,6 +116,7 @@ bool write_entry(char *date_string, size_t date_len)
         sqlite3_close(db);
         return 0;
     }
+
     // binding values (date and entry):
     sqlite3_bind_text(stmt, 1, date_string, -1, NULL);
     sqlite3_bind_text(stmt, 2, entry, -1, NULL);
@@ -88,14 +125,18 @@ bool write_entry(char *date_string, size_t date_len)
     sqlite3_step(stmt);
     // clearing memory alloced for the stmt
     sqlite3_finalize(stmt);
-
-    // same story with update sql.
-    // now off to delete rows  DELETE FROM table WHERE day
     sqlite3_close(db);
     printf("successfully used the db\n");
 
     free(entry);
 
+    return true;
+}
+
+bool edit_entry(char *date_string, size_t date_len)
+{
+    // will also check if db exists or not
+    // will take the date string and search the database for entries, just to see if entry exists.
     return true;
 }
 

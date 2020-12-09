@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     }
     // printf("Your date is %s, and string length is %d\n", date_string, LENGTH);
     // invoking write for testing
-    write_entry(date_string, LENGTH);
+    search_db(date_string, LENGTH);
 
     // Checks general command input. make use of tolower(), also w, r, d, rm, and -r -w -d -rm are ok
 
