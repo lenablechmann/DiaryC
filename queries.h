@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define ENTRY_LEN 8
+#define ENTRY_LEN 20
 
 bool search_db(char *date_string, size_t date_len);
 bool write_entry(char *date_string, size_t date_len);

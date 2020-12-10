@@ -85,6 +85,7 @@ char *parse_date_string(char *user_date)
         }
         else
         {
+            // making sure to free str_date to avoid leaks but still return null.
             free(str_date);
             return NULL;
         }

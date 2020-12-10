@@ -19,18 +19,8 @@ int main(int argc, char *argv[])
     }
 
     // Preparing a string where the date in ISO format will be stored (for future SQL queries)
-    char *date_string = (char*)(malloc((LENGTH + 1) * sizeof(char)));
-    if (date_string == NULL)
-    {
-        printf("Error allocating memory for the date string.\n");
-        exit(EXIT_FAILURE);
-    }
-
-    // Initializing the string to NUL
-    for (int i = 0; i < LENGTH + 1; i++)
-    {
-        date_string[i] = '\0';
-    }
+    // needn't allocate memory, since the string will be created in date.c, and we can just point at it here.
+    char *date_string;
 
     // Sends the argv (user date input) to date.c, will return a null string if user input seems off
     // If the date is plausible, the function will return the formatted date string YYYY-MM-DD
@@ -40,9 +30,10 @@ int main(int argc, char *argv[])
         printf("Acceptable date input formats: today, yesterday or DD.MM.YYYY\n");
         exit(EXIT_FAILURE);
     }
-    // printf("Your date is %s, and string length is %d\n", date_string, LENGTH);
+
     // invoking write for testing
-    search_db(date_string, LENGTH);
+    write_entry(date_string, LENGTH);
+    free(date_string);
 
     // Checks general command input. make use of tolower(), also w, r, d, rm, and -r -w -d -rm are ok
 
