@@ -1,5 +1,4 @@
 // Responsible for searching and modifying the database.
-// assuming user won't input more than 4000 chars in a day
 
 #include "queries.h"
 
@@ -57,40 +56,12 @@ bool search_db(char *date_string, size_t date_len)
 
 bool write_entry(char *date_string, size_t date_len)
 {
-    printf("The size of this string is %ld and the string is %s\n", date_len, date_string);
-
-    //TODO realloc date_string if not enough has been allocated
     // initializing a string for the user input
-    char *entry = (char *)(malloc((ENTRY_LEN + 1) * sizeof(char)));
-    if (entry == NULL)
-    {
-        printf("Error allocating initial memory for the entry.\n");
-        return false;
-    }
-
-    // Initializing the string to NUL
-    for (int i = 0; i < ENTRY_LEN + 1; i++)
-    {
-        entry[i] = '\0';
-    }
-
+    char *entry;
     printf("Write away (CTRL + D to save the entry and exit):\n");
-
-    // getc needs to be stored in an int, cause EOF is a negative int
-    int input_tmp = 0;
-    // This code works and should be relied upon as fallback. but need to work on realloc
-    int i;
-    for(i = 0; i < ENTRY_LEN; i++)
-    {
-        input_tmp = getchar();
-        entry[i] = input_tmp;
-
-        if(input_tmp == EOF)
-        {
-            entry[i] = '\0';
-            break;
-        }
-    }
+    entry = dynamic_input();
+    printf("\nYour input was:\n");
+    puts(entry);
     // which will take the date string, use search_db, then if entry exists cat onto the existing
     // if entry doesn't exist, make a new entry for the date, returns bool for success
 
@@ -159,4 +130,68 @@ bool delete_entry(char *date_string, size_t date_len)
     // delete(), which will take the date string, use search_db, and delete entry if finds it.
     // returns false if nothing can be found
     return true;
+}
+
+// getting endless user input and allocating memory dynamically
+char * dynamic_input()
+{
+    // allocating base memory for the entry string
+    char *entry = (char *)(malloc((ENTRY_LEN + 1) * sizeof(char)));
+    if (entry == NULL)
+    {
+        printf("Error allocating initial memory for the entry.\n");
+        return false;
+    }
+
+   int char_counter = 0; // will count every single char of the entry
+   // programm will keep count of reallocs and stop at a designated maximum, so that user can't overflow
+   // the system with endless text
+   int block_counter = 0; // each block is a realloc
+   int char_in_block = 0; // counts chars in the realloc block
+   int input_tmp = 0; // saves user input in an int, since EOF is negative
+
+    for(char_counter = 0; block_counter < BLOCKS_MAX; char_counter++)
+    {
+        // saving user input from stdin in the string
+        input_tmp = getchar();
+        entry[char_counter] = input_tmp;
+        char_in_block++;
+
+        if(input_tmp == EOF)
+        {
+            // creating null terminated string if EOF
+            entry[char_counter] = '\0';
+            break;
+        }
+        else if(char_in_block == ENTRY_LEN)
+        {
+            // realloc to a buffer just in case the realloc fails
+            char *buffer = NULL;
+            buffer = realloc(entry, (strlen(entry) + ENTRY_LEN));
+
+            if (buffer == NULL)
+            {
+                printf("Error reallocating memory for the entry.\n");
+                break;
+            }
+
+            else
+            {
+                //since realloc hasn't failed, we can reassign the real deal to the memory
+                entry = buffer; 
+                buffer = NULL;
+                // and reset the char counter for the next realloc
+                char_in_block = 0;
+                block_counter++;
+            }
+
+        }
+        if(block_counter == BLOCKS_MAX - 1 && char_in_block == ENTRY_LEN - 1)
+        {
+            entry[char_counter] = '\0';
+            printf("You've reached the entry input limit.");
+            break;
+        }
+    }
+    return entry;
 }
