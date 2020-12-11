@@ -64,7 +64,7 @@ bool write_entry(char *date_string, size_t date_len)
     char *entry = (char *)(malloc((ENTRY_LEN + 1) * sizeof(char)));
     if (entry == NULL)
     {
-        printf("Error allocating memory for the entry.\n");
+        printf("Error allocating initial memory for the entry.\n");
         return false;
     }
 
@@ -78,8 +78,8 @@ bool write_entry(char *date_string, size_t date_len)
 
     // getc needs to be stored in an int, cause EOF is a negative int
     int input_tmp = 0;
+    // This code works and should be relied upon as fallback. but need to work on realloc
     int i;
-
     for(i = 0; i < ENTRY_LEN; i++)
     {
         input_tmp = getchar();
@@ -91,29 +91,6 @@ bool write_entry(char *date_string, size_t date_len)
             break;
         }
     }
-    
-    
-    /* unfortunately this code is flaky memory wise
-
-    for (int count = 0; input_tmp != EOF ; count++)
-    {
-        int realloc_count = 0;
-        input_tmp = getc(stdin);
-        entry[count] = input_tmp;
-
-        if (realloc_count == ENTRY_LEN - 1)
-        {
-            entry = realloc(entry, (count + ENTRY_LEN) * sizeof(char));
-            if (entry == NULL)
-            {
-                printf("Failed to allocate more memory for your entry.\n");
-                break;
-            }
-            realloc_count = 0;
-        }
-    }
-    */
-
     // which will take the date string, use search_db, then if entry exists cat onto the existing
     // if entry doesn't exist, make a new entry for the date, returns bool for success
 
