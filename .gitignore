@@ -2,3 +2,5 @@
 *.json
 *.out
 *.o
+dbtest.c
+prototypes
