@@ -175,8 +175,50 @@ bool display_entry(char *date_string, size_t date_len)
 bool delete_entry(char *date_string, size_t date_len)
 {
     // delete(), which will take the date string, use search_db, and delete entry if finds it.
-    // returns false if nothing can be found
-    return true;
+    if(search_db(date_string, date_len) == false)
+    {
+        printf("There is no entry for the date %s\n", date_string);
+        return false;
+    }
+
+    sqlite3 *db;
+    int result = sqlite3_open("diary.db", &db);
+
+    // Checking db opened successfully (is not 0)
+    if (result)
+    {
+        printf("Can't open database.\n");
+        sqlite3_close(db);
+        return 0;
+    }
+
+    // using prepared statements v2 (v3 is for special occasions according to doco)
+    sqlite3_stmt *stmt;
+
+    int err = sqlite3_prepare_v2(db, "DELETE FROM diary WHERE date = ?", -1, &stmt, NULL);
+    if (err != SQLITE_OK)
+    {
+        printf("Sql failed to run the select statement. %s \n", sqlite3_errmsg(db));
+        sqlite3_finalize(stmt);
+        sqlite3_close(db);
+        return 0;
+    }
+
+    // binding values (date and entry):
+    sqlite3_bind_text(stmt, 1, date_string, -1, NULL);
+
+    if (sqlite3_step(stmt) != SQLITE_DONE)
+    {
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+        return true;
+    }
+    else
+    {
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+        return false;
+    }
 }
 
 // getting endless user input and allocating memory dynamically
