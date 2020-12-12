@@ -119,13 +119,6 @@ bool write_entry(char *date_string, size_t date_len)
     }
 }
 
-bool edit_entry(char *date_string, size_t date_len)
-{
-    // will also check if db exists or not
-    // will take the date string and search the database for entries, just to see if entry exists.
-    return true;
-}
-
 bool display_entry(char *date_string, size_t date_len)
 {
     if(search_db(date_string, date_len) == false)
