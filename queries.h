@@ -8,8 +8,8 @@
 #include <stdlib.h>
 #include <string.h>
 #define ENTRY_LEN 10
-// upper bound for the entry, assuming someone typing for 12 hours at 100 WPM
-#define BLOCKS_MAX 36000
+// upper bound for the entry, assuming someone writes a book as a single entry 10*1000
+#define BLOCKS_MAX 1000
 
 bool search_db(char *date_string, size_t date_len);
 bool write_entry(char *date_string, size_t date_len);
