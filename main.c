@@ -14,7 +14,10 @@ int main(int argc, char *argv[])
     // User input will have 3 argc: argv[1] is the command, argv[2] is the date string
     if (argc != 3)
     {
-        printf("Usage: ./diary command date.\nFor example: ./diary write today \n");
+        printf("Usage: ./diary command date.\nAcceptable commands are: w, -w, write for writing a diary entry\n");
+        printf("Example: ./diary write today.\nOr: r, -r, read for reading a diary entry\n");
+        printf("Example: ./diary read yesterday.\nOr: d, -d, delete for deleting a diary entry\n");
+        printf("Example: ./diary delete 10.12.2020.\nAcceptable dates are today, yesterday and DD.MM.YYYY\n");
         exit(EXIT_FAILURE);
     }
 
@@ -31,23 +34,21 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    // invoking write for testing
-    display_entry(date_string, LENGTH);
+    // Checks general command input and calls appropriate functions.
+    if (strcmp(argv[1], "w") == 0 || strcmp(argv[1], "write") == 0 || strcmp(argv[1], "-w") == 0)
+    {
+        write_entry(date_string, LENGTH);
+    }
+
+    else if (strcmp(argv[1], "r") == 0 || strcmp(argv[1], "read") == 0 || strcmp(argv[1], "-r") == 0)
+    {
+        display_entry(date_string, LENGTH);
+    }
+
+    else if (strcmp(argv[1], "d") == 0 || strcmp(argv[1], "delete") == 0 || strcmp(argv[1], "-d") == 0)
+    {
+        delete_entry(date_string, LENGTH);
+    }
     free(date_string);
-
-    // Checks general command input. make use of tolower(), also w, r, d, rm, and -r -w -d -rm are ok
-
-    // w, write, -w, should print "How was your day?",
-    // call the write function from queries.c,
-    // which will save the user input to the database (or cat it if the entry already exists)
-    // until the user inputs the ending
-
-    // r, -r, read should call the display function from queries.c, which will print the required entry
-    // if that entry exists (make a separate search db function in queries.c)
-
-    // if user input is delete, check if there is an entry with the date,
-    // if so, delete the entry
-
-    // once finished and got "true" from the function it called, exit the program
     return 0;
 }

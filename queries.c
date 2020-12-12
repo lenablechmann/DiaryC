@@ -3,11 +3,10 @@
 
 #include "queries.h"
 
-
 bool search_db(char *date_string, size_t date_len)
 {
     // will take the date string and search the database for entries
-    // returns true if entry exists, false if no entry exists. 
+    // returns true if entry exists, false if no entry exists.
 
     // accessing the db (creating one if doesn't exist)
     sqlite3 *db;
@@ -18,13 +17,14 @@ bool search_db(char *date_string, size_t date_len)
     {
         printf("Can't open database.\n");
         sqlite3_close(db);
-        return 0;
+        return false;
     }
 
     // making sure the table either exists or is created here.
     if (sqlite3_exec(db, "CREATE TABLE IF NOT EXISTS diary (id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 0, date INTEGER NOT NULL,entry TEXT NOT NULL);", NULL, NULL, NULL))
     {
         printf("Error opening the sqlite table.\n");
+        return false;
     }
 
     // using prepared statements v2 (v3 is for special occasions according to doco)
@@ -36,7 +36,7 @@ bool search_db(char *date_string, size_t date_len)
         printf("Sql failed to run the select statement. %s \n", sqlite3_errmsg(db));
         sqlite3_finalize(stmt);
         sqlite3_close(db);
-        return 0;
+        return false;
     }
 
     // binding values (date and entry):
@@ -44,19 +44,18 @@ bool search_db(char *date_string, size_t date_len)
 
     if (sqlite3_step(stmt) != SQLITE_DONE)
     {
-    sqlite3_finalize(stmt);
-    sqlite3_close(db);
+        sqlite3_finalize(stmt);
+        sqlite3_close(db);
         return true;
     }
     else
     {
-    sqlite3_finalize(stmt);
-    sqlite3_close(db);
+        sqlite3_finalize(stmt);
+        sqlite3_close(db);
         return false;
     }
 
     // clearing memory alloced for the stmt
-
 }
 
 bool write_entry(char *date_string, size_t date_len)
@@ -65,6 +64,11 @@ bool write_entry(char *date_string, size_t date_len)
     char *entry;
     printf("Write away (CTRL + D to save the entry and exit):\n");
     entry = dynamic_input();
+    if (entry == NULL)
+    {
+        printf("Seems like there was no entry.\n");
+        return false;
+    }
 
     // which will take the date string, use search_db, then if entry exists cat onto the existing
     // if entry doesn't exist, make a new entry for the date, returns bool for success
@@ -78,7 +82,7 @@ bool write_entry(char *date_string, size_t date_len)
     {
         printf("Can't open database.\n");
         sqlite3_close(db);
-        return 0;
+        return false;
     }
 
     // making sure the table either exists or is created here.
@@ -95,7 +99,7 @@ bool write_entry(char *date_string, size_t date_len)
         printf("Sql statement failed. %s \n", sqlite3_errmsg(db));
         sqlite3_finalize(stmt);
         sqlite3_close(db);
-        return 0;
+        return false;
     }
 
     // binding values (date and entry):
@@ -121,7 +125,7 @@ bool write_entry(char *date_string, size_t date_len)
 
 bool display_entry(char *date_string, size_t date_len)
 {
-    if(search_db(date_string, date_len) == false)
+    if (search_db(date_string, date_len) == false)
     {
         printf("There is no entry for the date %s\n", date_string);
         return false;
@@ -135,7 +139,7 @@ bool display_entry(char *date_string, size_t date_len)
     {
         printf("Can't open database.\n");
         sqlite3_close(db);
-        return 0;
+        return false;
     }
 
     // using prepared statements v2 (v3 is for special occasions according to doco)
@@ -147,12 +151,12 @@ bool display_entry(char *date_string, size_t date_len)
         printf("Sql failed to run the select statement. %s \n", sqlite3_errmsg(db));
         sqlite3_finalize(stmt);
         sqlite3_close(db);
-        return 0;
+        return false;
     }
 
     // binding values (date and entry):
     sqlite3_bind_text(stmt, 1, date_string, -1, NULL);
-    
+
     // Printing out all entries for the date
     while (sqlite3_step(stmt) != SQLITE_DONE)
     {
@@ -168,7 +172,7 @@ bool display_entry(char *date_string, size_t date_len)
 bool delete_entry(char *date_string, size_t date_len)
 {
     // delete(), which will take the date string, use search_db, and delete entry if finds it.
-    if(search_db(date_string, date_len) == false)
+    if (search_db(date_string, date_len) == false)
     {
         printf("There is no entry for the date %s\n", date_string);
         return false;
@@ -182,7 +186,7 @@ bool delete_entry(char *date_string, size_t date_len)
     {
         printf("Can't open database.\n");
         sqlite3_close(db);
-        return 0;
+        return false;
     }
 
     // using prepared statements v2 (v3 is for special occasions according to doco)
@@ -194,24 +198,16 @@ bool delete_entry(char *date_string, size_t date_len)
         printf("Sql failed to run the select statement. %s \n", sqlite3_errmsg(db));
         sqlite3_finalize(stmt);
         sqlite3_close(db);
-        return 0;
+        return false;
     }
 
     // binding values (date and entry):
     sqlite3_bind_text(stmt, 1, date_string, -1, NULL);
-
-    if (sqlite3_step(stmt) != SQLITE_DONE)
-    {
+    sqlite3_step(stmt);
+    printf("The entry for the day %s has been deleted.\n", date_string);
     sqlite3_finalize(stmt);
     sqlite3_close(db);
-        return true;
-    }
-    else
-    {
-    sqlite3_finalize(stmt);
-    sqlite3_close(db);
-        return false;
-    }
+    return true;
 }
 
 // getting endless user input and allocating memory dynamically
