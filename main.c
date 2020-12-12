@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     }
 
     // invoking write for testing
-    write_entry(date_string, LENGTH);
+    display_entry(date_string, LENGTH);
     free(date_string);
 
     // Checks general command input. make use of tolower(), also w, r, d, rm, and -r -w -d -rm are ok
