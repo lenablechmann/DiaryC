@@ -119,6 +119,7 @@ bool write_entry(char *date_string, size_t date_len)
     }
     else
     {
+        printf("\nYour entry for the day %s has been saved.\n", date_string);
         return true;
     }
 }

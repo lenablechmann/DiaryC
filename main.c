@@ -38,7 +38,6 @@ int main(int argc, char *argv[])
     if (strcmp(argv[1], "w") == 0 || strcmp(argv[1], "write") == 0 || strcmp(argv[1], "-w") == 0)
     {
         write_entry(date_string, LENGTH);
-        printf("\nYour entry for the day %s has been saved.\n", date_string);
     }
 
     else if (strcmp(argv[1], "r") == 0 || strcmp(argv[1], "read") == 0 || strcmp(argv[1], "-r") == 0)
