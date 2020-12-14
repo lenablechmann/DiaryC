@@ -10,7 +10,8 @@ An offline command line diary app written in C which will take user input and sa
   
 # Installation and dependencies
 - sqlite3 is required for this diary (should come preinstalled if you are using linux)
-- to install it on linux, put the diary file into the `/home/"yourusername"/.local/bin/` folder, then you will be able to run it from your command line anywhere
+- to install it on linux, download the git repository, run makefile, put the diary file into the `/home/"yourusername"/.local/bin/` folder, then you should be able to run it from your command line anywhere, the db will be saved to home
+
 
 # How to use
 Once installed, you can input the following in your command line/terminal:
@@ -41,10 +42,14 @@ You can also write, edit and delete entries of other days. Possible date inputs 
 
 `yesterday`
 
-`DD.MM.YYYY`  like `2.11.2020` (common European date format)
+`DD.MM.YYYY`  like `2.11.2020` (a common European date format)
 
-# Possible future features
-- making inputs for future dates not acceptable 
-- adding other date formats like MM/DD/YYYY 
+# Future feature ideas
+- making inputs for future dates not acceptable (except for "tomorrow") 
+- adding the MM/DD/YYYY date format
 - adding text statistics
+  - streak
+  - how many words per entry
+  - "grade level" kinda like Hemingway App
 - back up of the database
+- add keywords (possibly another table)
