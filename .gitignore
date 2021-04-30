@@ -3,5 +3,6 @@
 *.out
 *.o
 *.db
+diary
 dbtest.c
 prototypes
