@@ -9,8 +9,13 @@ An offline command line diary app written in C which will take user input and sa
 - there is a built in sql-injection protection as well as checking user command input for plausibility
   
 # Installation and dependencies
-- sqlite3 is required for this diary (should come preinstalled if you are using linux)
-- to install it on linux, download the git repository, run makefile, put the diary file into the `/home/"yourusername"/.local/bin/` folder, then you should be able to run it from your command line anywhere, the db will be saved to home
+- sqlite3 is required for this diary (might come preinstalled on some linux distributions)
+- to install this diary on linux, clone or download the git repository
+  1. cd into the DiaryC folder you just cloned `cd DiaryC`
+  1. run make inside of it `make`, this should create an executable file
+  1. if you want to use the diary and save the database in this very folder, enter `./diary write today`, this way you can hide the folder and the database
+  1. If you prefer to make the diary accessable from anywhere on linux, copy the executable `diary`file to the bin folder, where your distribution has all programs installed. `/usr/bin/`on ubuntu and give it an executable permission `sudo chmod 777 diary`
+  1. This way, you can use your diary like `diary write today`having a more natural flow.
 
 
 # How to use
